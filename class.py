@@ -23,7 +23,7 @@ class Player:
     def distance(self, ball) -> float : 
         return self.turtle.distance(ball)
 
-    def end(lowerBound, upperBound):
+    def hit(lowerBound, upperBound):
         if Player.distance(ball) < 50 and lowerBound< ball.ycor() < upperBound:
             ball_yspeed *= -1
 
@@ -118,9 +118,9 @@ while game_on:
         t.goto(0, 0)
         t.write("Game Over", False, "center", ("", 20))
 
-    pA.end(-260, -245)
+    pA.hit(-260, -245)
 
-    pB.end(245, 260)
+    pB.hit(245, 260)
 
 
     # if pA.distance(ball) < 50 and -260 < ball.ycor() < -245:
