@@ -136,11 +136,11 @@ while game_on:
             t.write("Game Over!A is the winner!", False, "center", ("", 20))
 
 
-    if playerA.distance(ball) < 50 and -260 < ball.ycor() < -245:
-        ball_yspeed *= -1
+    if playerA.distance(ball) < 50 and (-260 < ball.ycor() and ball.ycor() < -245):
+        ball_yspeed = abs(ball_yspeed)
         
-    if playerB.distance(ball) < 50 and 245 < ball.ycor() < 260:
-        ball_yspeed *= -1
+    if playerB.distance(ball) < 50 and (245 < ball.ycor() and ball.ycor()  < 260):
+        ball_yspeed = -abs(ball_yspeed)
 
 
 t.done()
