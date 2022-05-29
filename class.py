@@ -16,7 +16,6 @@ class Player:
         self.turtle.speed(0)
         self.turtle.goto(initX,initY)
         self.score = 0
-        # self.turtle.listen()
 
     def setColor(self, color):
         self.turtle.color(color)
@@ -33,10 +32,10 @@ class Player:
     def distance(self, ball) -> float : 
          return self.turtle.distance(ball)
 
-    # def getKey(self,rightKey, leftKey):
-    #     self.turtle.listen()
-    #     self.turtle.onkeypress(self.right, rightKey)
-    #     self.turtle.onkeypress(self.left, leftKey)  
+    def getKey(self,rightKey, leftKey):
+        t.onkeypress(self.right, rightKey) 
+        t.onkeypress(self.left, leftKey)
+
 
 class Ball:
     def __init__(self, difficulty) -> None:
@@ -51,6 +50,8 @@ class Ball:
     def moveOn(self):
         curX, curY = self.turtle.position()
         self.turtle.goto(curX + ball_xspeed, curY + ball_yspeed)
+
+    
 
 playerA = Player(0, -270)
 playerA.setColor("darkred")
@@ -82,13 +83,12 @@ def promt_menu():
     
 t.onkeypress(promt_menu,"Up")
 
+
 t.listen()
-t.onkeypress(playerA.right,"Right")
-t.onkeypress(playerA.left,"Left")
-t.onkeypress(playerB.right,"D")
-t.onkeypress(playerB.right,"d")
-t.onkeypress(playerB.left,"A")
-t.onkeypress(playerB.left,"a")
+playerA.getKey("Right","Left")
+playerB.getKey("D", "A")
+playerB.getKey("d", "a")
+
 
 Ball
 ball = t.Turtle()
@@ -102,7 +102,7 @@ ball.color("white")
 
 game_on = True
 
-#life score
+# score
 t.up()
 t.ht()
 t.goto(0,300)
@@ -119,11 +119,11 @@ while game_on:
 
     if ball.ycor() > 340:
         playerA.score = playerA.score+1
-        t.clear()
+        t.clear() ##這個t是寫字的寫他們幾分的他不是ball
         time.sleep(0.5)
-        ball.goto(0, -270) 
+        ball.goto(0, -270) #這個是如果b失分了，我要讓a發球
         t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-        ball_yspeed = abs(ball_yspeed)
+        ball_yspeed = abs(ball_yspeed) #這是讓a發球
         ball_xspeed = abs(ball_xspeed)
 
         if playerA.score==3:
