@@ -1,163 +1,157 @@
 import turtle as t
-import random
 import time
 import os
 
-t.bgcolor("lightgreen")
-t.setup(500, 700)
-
-
 class Player:
-    def __init__(self, initX, initY):
-        self.turtle = t.Turtle()
-        self.turtle.shape("square")
-        self.turtle.shapesize(1,5)
-        self.turtle.up()
-        self.turtle.speed(0)
-        self.turtle.goto(initX,initY)
-        self.score = 0
+	def __init__(self, initX, initY):
+		self.turtle = t.Turtle()
+		self.turtle.shape("square")
+		self.turtle.shapesize(1,5)
+		self.turtle.up()
+		self.turtle.speed(0)
+		self.turtle.goto(initX,initY)
+		self.score = 0
 
-    def setColor(self, color):
-        self.turtle.color(color)
+	def setColor(self, color):
+		self.turtle.color(color)
 
-    def right(self):
-        if self.turtle.xcor()<200:
-            self.turtle.forward(60)
-    
-    def left(self):
-        if self.turtle.xcor()>-200:
-            self.turtle.backward(60)
+	def right(self):
+		if self.turtle.xcor()<200:
+			self.turtle.forward(60)
+	
+	def left(self):
+		if self.turtle.xcor()>-200:
+			self.turtle.backward(60)
 
+	def distance(self, ball) -> float : 
+		 return self.turtle.distance(ball)
 
-    def distance(self, ball) -> float : 
-         return self.turtle.distance(ball)
+	def bindKey(self,rightKey, leftKey):
+		t.onkeypress(self.right, rightKey) 
+		t.onkeypress(self.left, leftKey)
 
-    def getKey(self,rightKey, leftKey):
-        t.onkeypress(self.right, rightKey) 
-        t.onkeypress(self.left, leftKey)
-
+	def position(self):
+		return self.turtle.position()
 
 class Ball:
-    def __init__(self, difficulty) -> None:
-        self.turtle = t.Turtle()
-        self.turtle.shape("circle")
-        self.turtle.shapesize(1.3)
-        self.turtle.speed(0)
-        self.turtle.color("white")
-        self.xspeed = difficulty
-        self.yspeed = difficulty
-    
-    def moveOn(self):
-        curX, curY = self.turtle.position()
-        self.turtle.goto(curX + ball_xspeed, curY + ball_yspeed)
+	def __init__(self, difficulty) -> None:
+		self.turtle = t.Turtle()
+		self.turtle.shape("circle")
+		self.turtle.shapesize(1.3)
+		self.turtle.speed(0)
+		self.turtle.color("white")
+		self.xspeed = difficulty
+		self.yspeed = difficulty
+		self.turtle.up()
+	
+	def moveOn(self):
+		curX, curY = self.turtle.position()
+		self.turtle.goto(curX + self.xspeed, curY + self.yspeed)
 
-    
+	def xRebound(self):
+		self.xspeed *= -1 
 
-playerA = Player(0, -270)
-playerA.setColor("darkred")
-playerB = Player(0, 270)
-playerB.setColor("darkblue")
+	def xcor(self) -> int:
+		return self.turtle.xcor()
+	
+	def ycor(self) -> int:
+		return self.turtle.ycor()
 
+	def getPosition(self):
+		return self.turtle.position()
 
-#难度选择
-difficulty = t.numinput('输入难度：', '可输入1-10级', 3, 1, 10)
-ball_xspeed = difficulty
-ball_yspeed = difficulty
+	def getXSpeed(self):
+		return self.xspeed
 
-# ball = Ball(difficulty)
+	def getYSpeed(self):
+		return self.yspeed
+
+	def setXSpeed(self, xspeed):
+		self.xspeed = xspeed
+
+	def setYSpeed(self, yspeed):
+		self.yspeed = yspeed
+
+	def goto(self, x, y=None):
+		if y is None:
+			self.turtle.goto(x)
+		else:
+			self.turtle.goto(x,y)
 
 def promt_menu():
-    txt = t.textinput('what do you want to do?','you can type [restart/quit/score]:')
-    if txt=="quit":
-        t.Screen().bye()
-    if txt=="restart":
-        t.Screen().bye()
-        os.system('double.py')
-    if txt=="score":
-        t.goto(0,0)
-        t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-        time.sleep(3)
-        t.undo()
+	txt = t.textinput('what do you want to do?','you can type [restart/quit/score]:')
+	if txt=="quit":
+		t.Screen().bye()
+	if txt=="restart":
+		t.Screen().bye()
+		os.system('double.py')
+	if txt=="score":
+		t.goto(0,0)
+		t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
+		time.sleep(3)
+		t.undo()
 
+def winAPoint( winner, loser):
+	winner.score += 1
+	winX, winY = winner.position()
+	loseX, loseY = loser.position()
+	t.clear()
+	if winY>loseY:
+		printScore(loser.score, winner.score)
+	else:
+		printScore(winner.score, loser.score) 
+	time.sleep(0.5)
+	pingpong.goto(winX, winY)
+	pingpong.setYSpeed(-winY/abs(winY)* abs(pingpong.getYSpeed())) 
 
-    
+def printScore(p1Score, p2Score):
+	t.clear()
+	t.goto(0, 300)
+	t.write(f"Ascore : {p1Score},Bscore : {p2Score}", False, "center", ("", 15))
+
+def endGame(playerA, playerB):
+	pingpong.goto(0, 100)  
+	t.clear()
+	t.goto(0, 50)
+	t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
+	t.goto(0,0)
+	if playerA.score > playerB.score:
+		t.write("Game Over! player A is the winner!",False, "center",("",20))
+	else:
+		t.write("Game Over! player B is the winner!",False, "center",("",20))
+
+difficulty = t.numinput('输入难度：', '可输入1-10级', 3, 1, 10)
+pingpong = Ball(difficulty)
+playerA = Player(0, -270)
+playerB = Player(0, 270)
+playerA.setColor("darkred")
+playerB.setColor("darkblue")
+playerA.bindKey("Right","Left")
+playerB.bindKey("D", "A")
+playerB.bindKey("d", "a")
+t.bgcolor("lightgreen")
+t.setup(500, 700)
 t.onkeypress(promt_menu,"Up")
-
-
 t.listen()
-playerA.getKey("Right","Left")
-playerB.getKey("D", "A")
-playerB.getKey("d", "a")
-
-
-Ball
-ball = t.Turtle()
-ball.shape("circle")
-ball.shapesize(1.3)
-ball.up()
-ball.speed(0)
-ball.color("white")
-
-# ball = Ball
-
-game_on = True
-
-# score
 t.up()
 t.ht()
-t.goto(0,300)
-t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-
+printScore(playerA.score, playerB.score)
+game_on = True
 
 while game_on:
-    new_x = ball.xcor() + ball_xspeed
-    new_y = ball.ycor() + ball_yspeed
-    ball.goto(new_x, new_y)
-
-    if ball.xcor() > 240 or ball.xcor() < -240:
-        ball_xspeed *= -1
-
-    if ball.ycor() > 340:
-        playerA.score = playerA.score+1
-        t.clear() ##這個t是寫字的寫他們幾分的他不是ball
-        time.sleep(0.5)
-        ball.goto(0, -270) #這個是如果b失分了，我要讓a發球
-        t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-        ball_yspeed = abs(ball_yspeed) #這是讓a發球
-        ball_xspeed = abs(ball_xspeed)
-
-        if playerA.score==3:
-           ball.goto(0, 100)  
-           game_on=False
-           t.clear()
-           t.goto(0, 50)
-           t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-           t.goto(0,0)
-           t.write("Game Over! player A is the winner!",False, "center",("",20))
-
-    if ball.ycor() < -340:
-        playerB.score = playerB.score+1
-        t.clear()
-        time.sleep(0.5)
-        ball.goto(0, 270)
-        t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-        ball_yspeed = -abs(ball_yspeed)
-        ball_xspeed = -abs(ball_xspeed)
-
-        if playerB.score==3:
-            ball.goto(0, 100)  
-            game_on=False
-            t.clear()
-            t.goto(0, 50)
-            t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
-            t.goto(0, 0)
-            t.write("Game Over! playerB is the winner!", False, "center", ("", 20))
-
-
-    if playerA.distance(ball) < 50 and (-260 < ball.ycor() and ball.ycor() < -245):
-        ball_yspeed = abs(ball_yspeed)
-        
-    if playerB.distance(ball) < 50 and (245 < ball.ycor() and ball.ycor()  < 260):
-        ball_yspeed = -abs(ball_yspeed)
+	pingpong.moveOn()
+	if pingpong.xcor() > 240 or pingpong.xcor() < -240:
+		pingpong.xRebound()
+	if pingpong.ycor() > 340:
+		winAPoint(playerA, playerB)			
+	if pingpong.ycor() < -340:
+		winAPoint(playerB, playerA)
+	if playerA.score == 3 or playerB.score == 3:
+		endGame(playerA, playerB)
+		game_on = False
+	if playerA.distance(pingpong.getPosition()) < 50 and (-260 < pingpong.ycor() and pingpong.ycor() < -245):
+		pingpong.setYSpeed(abs(pingpong.getYSpeed()))      
+	if playerB.distance(pingpong.getPosition()) < 50 and (245 < pingpong.ycor() and pingpong.ycor() < 260):
+		pingpong.setYSpeed(-abs(pingpong.getYSpeed()))
 
 t.done()
