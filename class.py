@@ -25,7 +25,7 @@ class Player:
 			self.turtle.backward(60)
 
 	def distance(self, ball) -> float : 
-		 return self.turtle.distance(ball)
+		return self.turtle.distance(ball)
 
 	def bindKey(self,rightKey, leftKey):
 		t.onkeypress(self.right, rightKey) 
