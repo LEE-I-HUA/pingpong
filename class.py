@@ -4,7 +4,7 @@ import time
 import os
 
 class Player:
-	def __init__(self, initX, initY):
+	def __init__(self, initX, initY) -> None:
 		self.turtle = t.Turtle()
 		self.turtle.shape("square")
 		self.turtle.shapesize(1,5)
@@ -13,25 +13,23 @@ class Player:
 		self.turtle.goto(initX,initY)
 		self.score = 0
 
-	def setColor(self, color):
+	def setColor(self, color) -> None:
 		self.turtle.color(color)
 
-	def right(self):
-		if self.turtle.xcor()<200:
-			self.turtle.forward(60)
-	
-	def left(self):
-		if self.turtle.xcor()>-200:
-			self.turtle.backward(60)
-
+	def right(self) -> None:
+		if self.turtle.xcor()<200 : self.turtle.forward(60) 
+			
+	def left(self) -> None:
+		if self.turtle.xcor()>-200 : self.turtle.backward(60)
+			
 	def distance(self, ball) -> float : 
 		return self.turtle.distance(ball)
 
-	def bindKey(self,rightKey, leftKey):
+	def bindKey(self,rightKey, leftKey) -> None:
 		t.onkeypress(self.right, rightKey) 
 		t.onkeypress(self.left, leftKey)
 
-	def position(self):
+	def position(self) -> tuple:
 		return self.turtle.position()
 
 class Ball:
@@ -45,11 +43,11 @@ class Ball:
 		self.yspeed = difficulty
 		self.turtle.up()
 	
-	def moveOn(self):
+	def moveOn(self) -> None:
 		curX, curY = self.turtle.position()
 		self.turtle.goto(curX + self.xspeed, curY + self.yspeed)
 
-	def xRebound(self):
+	def xRebound(self) -> None:
 		self.xspeed = -abs(self.xspeed)*self.xcor()/abs(self.xcor())
 
 	def xcor(self) -> int:
@@ -58,26 +56,23 @@ class Ball:
 	def ycor(self) -> int:
 		return self.turtle.ycor()
 
-	def getPosition(self):
+	def getPosition(self) -> tuple:
 		return self.turtle.position()
 
-	def getXSpeed(self):
+	def getXSpeed(self) -> int:
 		return self.xspeed
 
-	def getYSpeed(self):
+	def getYSpeed(self) -> int:
 		return self.yspeed
 
-	def setXSpeed(self, xspeed):
+	def setXSpeed(self, xspeed) -> None:
 		self.xspeed = xspeed
 
-	def setYSpeed(self, yspeed):
+	def setYSpeed(self, yspeed) -> None:
 		self.yspeed = yspeed
 
 	def goto(self, x, y=None):
-		if y is None:
-			self.turtle.goto(x)
-		else:
-			self.turtle.goto(x,y)
+		self.turtle.goto(x) if y is None else self.turtle.goto(x,y)
 
 def promt_menu():
 	txt = t.textinput('what do you want to do?','you can type [restart/quit/score]:')
