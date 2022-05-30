@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import turtle as t
 import time
 import os
@@ -49,7 +50,7 @@ class Ball:
 		self.turtle.goto(curX + self.xspeed, curY + self.yspeed)
 
 	def xRebound(self):
-		self.xspeed *= -1 
+		self.xspeed = -abs(self.xspeed)*self.xcor()/abs(self.xcor())
 
 	def xcor(self) -> int:
 		return self.turtle.xcor()
@@ -91,15 +92,11 @@ def promt_menu():
 		time.sleep(3)
 		t.undo()
 
-def winAPoint( winner, loser):
+def finishThisRound( playerA, playerB, ball):
+	winner, loser = (playerA, playerB) if playerA.distance(ball.getPosition()) > playerB.distance(ball.getPosition()) else (playerB, playerA)
 	winner.score += 1
 	winX, winY = winner.position()
-	loseX, loseY = loser.position()
-	t.clear()
-	if winY>loseY:
-		printScore(loser.score, winner.score)
-	else:
-		printScore(winner.score, loser.score) 
+	printScore(playerA.score, playerB.score)
 	time.sleep(0.5)
 	pingpong.goto(winX, winY)
 	pingpong.setYSpeed(-winY/abs(winY)* abs(pingpong.getYSpeed())) 
@@ -115,10 +112,7 @@ def endGame(playerA, playerB):
 	t.goto(0, 50)
 	t.write(f"Ascore : {playerA.score},Bscore : {playerB.score}", False, "center", ("", 15))
 	t.goto(0,0)
-	if playerA.score > playerB.score:
-		t.write("Game Over! player A is the winner!",False, "center",("",20))
-	else:
-		t.write("Game Over! player B is the winner!",False, "center",("",20))
+	t.write("Game Over! player {} is the winner!".format("A" if playerA.score > playerB.score else "B"), False, "center",("",20))
 
 difficulty = t.numinput('输入难度：', '可输入1-10级', 3, 1, 10)
 pingpong = Ball(difficulty)
@@ -142,10 +136,8 @@ while game_on:
 	pingpong.moveOn()
 	if pingpong.xcor() > 240 or pingpong.xcor() < -240:
 		pingpong.xRebound()
-	if pingpong.ycor() > 340:
-		winAPoint(playerA, playerB)			
-	if pingpong.ycor() < -340:
-		winAPoint(playerB, playerA)
+	if pingpong.ycor() > 340 or pingpong.ycor() < -340:
+		finishThisRound(playerA, playerB, pingpong)			
 	if playerA.score == 3 or playerB.score == 3:
 		endGame(playerA, playerB)
 		game_on = False
