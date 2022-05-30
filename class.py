@@ -129,16 +129,11 @@ game_on = True
 
 while game_on:
 	pingpong.moveOn()
-	if pingpong.xcor() > 240 or pingpong.xcor() < -240:
-		pingpong.xRebound()
-	if pingpong.ycor() > 340 or pingpong.ycor() < -340:
-		finishThisRound(playerA, playerB, pingpong)			
-	if playerA.score == 3 or playerB.score == 3:
+	if pingpong.xcor() > 240 or pingpong.xcor() < -240: pingpong.xRebound()
+	if pingpong.ycor() > 340 or pingpong.ycor() < -340:	finishThisRound(playerA, playerB, pingpong)			
+	if playerA.score == 3 or playerB.score == 3: 
 		endGame(playerA, playerB)
 		game_on = False
-	if playerA.distance(pingpong.getPosition()) < 50 and (-260 < pingpong.ycor() and pingpong.ycor() < -245):
-		pingpong.setYSpeed(abs(pingpong.getYSpeed()))      
-	if playerB.distance(pingpong.getPosition()) < 50 and (245 < pingpong.ycor() and pingpong.ycor() < 260):
-		pingpong.setYSpeed(-abs(pingpong.getYSpeed()))
-
+	if playerA.distance(pingpong.getPosition()) < 50 and (-260 < pingpong.ycor() and pingpong.ycor() < -245): pingpong.setYSpeed(abs(pingpong.getYSpeed()))      
+	if playerB.distance(pingpong.getPosition()) < 50 and (245 < pingpong.ycor() and pingpong.ycor() < 260): pingpong.setYSpeed(-abs(pingpong.getYSpeed()))
 t.done()
